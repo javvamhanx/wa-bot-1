@@ -44,15 +44,43 @@ const insertUser = (db, document) =>
         resolve(allRecords);
     });
 
-const SESSION_FILE_PATH = './session.json';
+const SESSION_FILE_PATH = "./session.json";
+// file is included here
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
-    sessionCfg = require(SESSION_FILE_PATH);
+  sessionCfg = require(SESSION_FILE_PATH);
 }
-
-const client = new Client({ puppeteer: { headless: true }, session: sessionCfg });
+client = new Client({	  
+    
+	     puppeteer: {
+        executablePath: '/usr/bin/chromium',
+        headless: true,
+		args: [
+      "--log-level=3", // fatal only
+   
+      "--no-default-browser-check",
+      "--disable-infobars",
+      "--disable-web-security",
+      "--disable-site-isolation-trials",
+      "--no-experiments",
+      "--ignore-gpu-blacklist",
+      "--ignore-certificate-errors",
+      "--ignore-certificate-errors-spki-list",
+    
+      "--disable-extensions",
+      "--disable-default-apps",
+      "--enable-features=NetworkService",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+    
+      "--no-first-run",
+      "--no-zygote"
+    ]
+		
+    },	      
+    session: sessionCfg
+});
 // You can use an existing session and avoid scanning a QR code by adding a "session" object to the client options.
-// This object must include WABrowserId, WASecretBundle, WAToken1 and WAToken2.
 
 client.initialize();
 
